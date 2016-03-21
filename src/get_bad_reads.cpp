@@ -45,10 +45,6 @@ int main(int argc, char* argv[]){
         errors.push_back(std::stoi(line.substr(0, line.find(" : "))));
     }
 
-//    for (uint i=0; i<100; ++i){
-//        std::cout<<errors[i]<<std::endl;
-//    }
-
     std::cout << " - Errors file loaded (" << std::to_string(errors.size()) << ")" << std::endl;
 
     errorsFile.close();
@@ -83,10 +79,6 @@ int main(int argc, char* argv[]){
 
     file1.close();
 
-//    for (uint i=0; i<100; ++i){
-//        std::cout<<reads[i].id<<"\n"<<reads[i].seq_1<<std::endl;
-//    }
-
     std::cout << " - File 1 loaded (" << std::to_string(reads.size()) << ")" << std::endl;
 
     std::sort(reads.begin(), reads.end());
@@ -104,17 +96,10 @@ int main(int argc, char* argv[]){
             if (stoi(line.substr(1)) == *e){
 
                 print = true;
-//                if(r<10){
-//                    std::cout<<r<<" - "<<*e<<"\n"<<line<<std::endl;
-//                }
                 ++e;
             }
 
         } else if (print) {
-
-//            if(r<10){
-//                std::cout<<r<<" - "<<*e<<"\n"<<line<<std::endl;
-//            }
 
             reads[r].seq_2 = line;
             ++r;
@@ -122,10 +107,6 @@ int main(int argc, char* argv[]){
 
         }
     }
-
-//    for (uint i=0; i<100; ++i){
-//        std::cout<<reads[i].id<<"\n"<<reads[i].seq_1<<"\n"<<reads[i].seq_2<<std::endl;
-//    }
 
     print = false;
     e = errors.begin();
@@ -143,7 +124,8 @@ int main(int argc, char* argv[]){
 
         } else if (print) {
 
-            ofile << std::to_string(reads[r].id) << '\n' << reads[r].seq_1 << '\n' << reads[r].seq_2 << '\n' << line <<"\n";
+            ofile << '>' << std::to_string(reads[r].id) << "\nRead: " << line << '\n' << file1_p << ": " << reads[r].seq_1 <<
+                     '\n' << file2_p << ": " << reads[r].seq_2 << '\n';
             ++r;
             print = false;
 

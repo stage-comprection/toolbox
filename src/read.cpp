@@ -29,7 +29,11 @@ void ReadPair::compare(std::ofstream& outputFile, std::ofstream& outputFileCount
 
         if (this->seq_1.size() != this->seq_2.size()){
 
-            outputFile << std::to_string(this->id) << " : " << "size_difference\n";
+            outputFile << std::to_string(this->id) << " : " << "size_difference_" << std::to_string(this->seq_1.size()) << "_" <<
+                          std::to_string(this->seq_2.size()) << "\n";
+
+            outputFileCount << std::to_string(this->id) << " : " << "size_difference_" << std::to_string(this->seq_1.size()) << "_" <<
+                          std::to_string(this->seq_2.size()) << "\n";
 
         } else {
 
@@ -61,7 +65,27 @@ void ReadPair::compare(std::ofstream& outputFile, std::ofstream& outputFileCount
 
     } else {
 
-        outputFile << std::to_string(this->id) << " : " << "not_aligned\n";
+        if (this->seq_1 == "not_aligned"){
+
+            if (this->seq_2 == "not_aligned"){
+
+                outputFile << std::to_string(this->id) << " : " << "seq_1_2_not_aligned\n";
+                outputFileCount << std::to_string(this->id) << " : " << "seq_1_2_not_aligned\n";
+
+            } else {
+
+                outputFile << std::to_string(this->id) << " : " << "seq_1_not_aligned\n";
+                outputFileCount << std::to_string(this->id) << " : " << "seq_1_2_not_aligned\n";
+
+            }
+
+        } else {
+
+            outputFile << std::to_string(this->id) << " : " << "seq_2_not_aligned\n";
+            outputFileCount << std::to_string(this->id) << " : " << "seq_1_2_not_aligned\n";
+
+        }
+
     }
 }
 
