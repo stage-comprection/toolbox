@@ -75,14 +75,14 @@ void ReadPair::compare(std::ofstream& outputFile, std::ofstream& outputFileCount
             } else {
 
                 outputFile << std::to_string(this->id) << " : " << "seq_1_not_aligned\n";
-                outputFileCount << std::to_string(this->id) << " : " << "seq_1_2_not_aligned\n";
+                outputFileCount << std::to_string(this->id) << " : " << "seq_1_not_aligned\n";
 
             }
 
         } else {
 
             outputFile << std::to_string(this->id) << " : " << "seq_2_not_aligned\n";
-            outputFileCount << std::to_string(this->id) << " : " << "seq_1_2_not_aligned\n";
+            outputFileCount << std::to_string(this->id) << " : " << "seq_2_not_aligned\n";
 
         }
 
