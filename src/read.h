@@ -30,7 +30,7 @@ struct ReadPair{
         return(id < readPair.id);
     }
 
-    void compare(std::ofstream& outputFile);
+    void compare(std::ofstream& outputFile, std::ofstream& outputFileCount);
     ReadPair();
 
 };

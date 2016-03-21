@@ -21,7 +21,7 @@ ReadPair::ReadPair(){
 
 
 // Compares two reads and returns the positions of difference between thoses reads
-void ReadPair::compare(std::ofstream& outputFile){
+void ReadPair::compare(std::ofstream& outputFile, std::ofstream& outputFileCount){
 
     // In case something was removed during correction or the reference is smaller/bigger...
 
@@ -46,6 +46,7 @@ void ReadPair::compare(std::ofstream& outputFile){
 
             if (errors.size() > 0){
 
+                outputFileCount << std::to_string(this->id)<< " : " << std::to_string(errors.size()) << "\n";
                 outputFile << std::to_string(this->id)<< " : ";
 
                 for (uint i=0; i < errors.size() - 1; ++i){

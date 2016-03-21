@@ -24,6 +24,10 @@ int main(int argc, char* argv[]){
         std::vector<Read> reads;
         reads.resize(inputFile_n);
 
+        for (uint i=0; i<reads.size();++i){
+            reads[i].id = i;
+        }
+
         std::string line;
         uint readNumber = 0;
 
@@ -42,11 +46,9 @@ int main(int argc, char* argv[]){
 
         sort(reads.begin(), reads.end());
 
-        outputFile.open(outputFileName.c_str());
-
         for (uint i=0; i<reads.size(); ++i){
 
-            outputFile << ">" << reads[i].id << "\n" << reads[i].seq << "\n";
+            outputFile << ">" << std::to_string(reads[i].id) << "\n" << reads[i].seq << "\n";
         }
 
         outputFile.close();
