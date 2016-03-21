@@ -1,5 +1,6 @@
 #include "utils.h"
 #include "read.h"
+#include <sstream>
 
 
 /*
@@ -13,11 +14,15 @@ bool is_sam(std::ifstream& file){
 
     resetFileIndex(file);
 
-    for (uint i=0; i<100; ++i){
+    for (uint i=0; i<20; ++i){
         getline(file, line);
-        if (line[0] == '>') return false;
+        if (line[0] == '>'){
+            resetFileIndex(file);
+            return false;
+        }
     }
 
+    resetFileIndex(file);
     return true;
 }
 
@@ -33,7 +38,31 @@ int main(int argc, char *argv[]) {
         std::string fileName = argv[1];
         std::ifstream file;
         file.open(fileName);
-        uint file_s = countReads(file);
+        bool sam = is_sam(file);
+        uint file_s = 0;
+        std::string line;
+
+        if (!sam){
+
+            file_s = countReads(file);
+
+        } else {
+
+            uint read_n;
+
+            while(getline(file, line)){
+                if (line[0] != '@'){
+                    read_n = std::stoi(line.substr(0, '\t'));
+                    if (read_n > file_s) file_s = read_n;
+                }
+            }
+
+            resetFileIndex(file);
+        }
+
+        std::cout << " - Reading file (";
+
+        if(sam) std::cout << "Format : SAM) ...\n"<<std::endl; else std::cout<<"Format : not SAM) ...\n" << std::endl;
 
         if (file.is_open()){
 
@@ -44,9 +73,6 @@ int main(int argc, char *argv[]) {
                 reads[i].id = i;
             }
 
-            bool sam = is_sam(file);
-
-            std::string line;
             uint readNumber = 0;
 
             if (sam){
@@ -76,6 +102,29 @@ int main(int argc, char *argv[]) {
             }
 
             file.close();
+
+            sort(reads.begin(), reads.end());
+
+            std::cout << " - File loaded\n\n" << std::endl;
+
+            int iss_num = 0;
+            std::string input = "exit";
+
+            do {
+                std::cout << "Enter read number : ";
+                std::cin >> input;
+                std::istringstream iss(input);
+
+                if (!(iss >> iss_num).fail()) {
+
+                    std::cout << ">" << reads[iss_num].id << "\n" << reads[iss_num].seq << "\n\n";
+
+                } else if (input != "exit" and input != "quit"){
+
+                    std::cerr << "You did not enter a valid line number. To leave the program, type 'exit' or 'quit'.\n" << std::endl;
+                }
+
+            } while (input != "exit" and input != "quit");
 
         } else {
 
