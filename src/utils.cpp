@@ -1,18 +1,20 @@
 #include "utils.h"
 
-// Splits a std::string into a std::vector of std::strings according to a specified delimiter (default: \t)
-std::vector<std::string> split(std::string str, const std::string delimiter){
 
-    std::vector<std::string> output;
-    size_t pos;
+// Check if read is mapped with reverse complement: bit #5 has to be 'on'
+bool is_RC(std::bitset<12> binary){
+    if (binary.test(4)) return true;
+    return false;
+}
 
-    while ((pos = str.find(delimiter)) != std::string::npos){
-        output.push_back(str.substr(0, pos));
-        str.erase(0, pos + delimiter.length());
-    }
-    output.push_back(str.substr(0, pos));
 
-    return output;
+
+
+// Check if read is mapped: bit #3 has to be 'on'
+bool is_mapped(std::bitset<12> binary){
+
+    if (binary.test(2)) return false;
+    return true;
 }
 
 
@@ -32,6 +34,24 @@ uint countReads(std::ifstream& file){
     resetFileIndex(file);
 
     return count;
+}
+
+
+
+
+// Splits a std::string into a std::vector of std::strings according to a specified delimiter (default: \t)
+std::vector<std::string> split(std::string str, const std::string delimiter){
+
+    std::vector<std::string> output;
+    size_t pos;
+
+    while ((pos = str.find(delimiter)) != std::string::npos){
+        output.push_back(str.substr(0, pos));
+        str.erase(0, pos + delimiter.length());
+    }
+    output.push_back(str.substr(0, pos));
+
+    return output;
 }
 
 
