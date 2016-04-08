@@ -4,91 +4,94 @@
 #include <iostream>
 
 
-using namespace std;
 
-void formatReadsFile(string& readsFilePath, bool keepN){
+// Format a reads file to give to each read an ID = position of the read in file (read 1 = 0, read 2 = 1 ...) and discard reads with Ns.
+int main(int argc, char *argv[]){
 
-    ifstream readsFile;
-    string originalreadsFile = readsFilePath + ".backup";
-    readsFile.open(originalreadsFile.c_str());
+    if (argc < 2){
 
-    ofstream formattedReadsFile;
-    formattedReadsFile.open(readsFilePath.c_str());
+        std::cerr << "Usage : ./format_reads_file file (keep_N)" << std::endl << std::endl;
 
-    string line, name, sequence;
-    uint count = 0;
+        return -1;
 
-    while(getline(readsFile, line)){
+    } else {
 
-        if(line[0] == '>'){
+        // Retrieve command-line arguments
+        std::string inputFilePath = argv[1];
+        std::string backupFilePath = inputFilePath + ".backup";
 
-            if (sequence.size() > 0){
+        int rename_res = std::rename(inputFilePath.c_str(), backupFilePath.c_str());
 
-                if (sequence.find("to_thrash") == string::npos){
+        if (rename_res != 0){
 
-                    formattedReadsFile<<">"<<name<<"\n"<<sequence<<"\n";
+            std::cerr << "Error : could not rename the file """ << inputFilePath << """ into """ << backupFilePath <<
+                         """.\nCheck input file name." << std::endl;
+
+            return -3;
+
+        } else {
+
+            // Initialize file streams
+            std::ifstream inputFile;
+            std::ofstream outputFile;
+
+            inputFile.open(backupFilePath);
+            outputFile.open(inputFilePath);
+
+            if (inputFile.is_open() and outputFile.is_open()){
+
+                // If keep_N is false, reads with N in their sequence will be discarded
+                bool keep_N = false;
+
+                if (argc == 3){
+
+                    std::string temp = argv[2];
+                    if (temp == "TRUE" or temp == "True" or temp == "true" or temp == "T" or temp == "t") keep_N = true;
+                }
+
+                std::string line;
+                uint count = 0;
+
+                if (keep_N){
+
+                    while(std::getline(inputFile, line)){
+
+                        if (line[0] != '>' and line.size() > 1){
+
+                            outputFile << '>' << std::to_string(count) << "\n" << line;
+                            ++count;
+                        }
+                    }
 
                 } else {
 
-                    --count;
+                    while(std::getline(inputFile, line)){
+
+                        if (line[0] != '>' and line.find('N') == std::string::npos and line.size() > 1){
+
+                            outputFile << '>' << std::to_string(count) << "\n" << line;
+                            ++count;
+                        }
+                    }
                 }
-            }
-
-            name = to_string(count);
-            sequence = "";
-
-            ++count;
-
-        } else if (line.find("N") == string::npos){
-
-            sequence += line;
-
-        } else {
-
-            if (keepN){
-
-                sequence += line;
 
             } else {
 
-                sequence = "to_thrash";
+                if (!inputFile.is_open()){
+
+                    std::cerr << "Error : can't open the file """ << backupFilePath << """, please check your input." << std::endl;
+                }
+
+                if (!outputFile.is_open()){
+
+                    std::cerr << "Error : can't open the file """ << inputFilePath << """, please check your input." << std::endl;
+                }
+
+                return -2;
             }
-
-
         }
     }
 
-    if (sequence.size() > 0){
-
-        if (sequence.find("to_thrash") == string::npos){
-
-            formattedReadsFile<<">"<<name<<"\n"<<sequence<<"\n";
-
-        } else {
-
-            --count;
-        }
-    }
-
-    readsFile.close();
-    formattedReadsFile.close();
-}
-
-
-
-int main(int argc, char *argv[]){
-
-    if (argc < 3){
-        cout<<"\nError : not enough arguments, exiting...\n";
-        return -1;
-    }
-
-    string filePath = argv[1];
-    string keepN_s = argv[2];
-    bool keepN = true;
-    if (keepN_s != "T") keepN = false;
-    string readsFilePath = filePath;
-    formatReadsFile(readsFilePath, keepN);
     return 0;
 }
 

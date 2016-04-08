@@ -3,17 +3,20 @@
 
 // Check if read is mapped with reverse complement: bit #5 has to be 'on'
 bool is_RC(std::bitset<12> binary){
+
     if (binary.test(4)) return true;
+
     return false;
 }
 
 
 
 
-// Check if read is mapped: bit #3 has to be 'on'
+// Check if read is mapped: bit #3 has to be 'off'
 bool is_mapped(std::bitset<12> binary){
 
     if (binary.test(2)) return false;
+
     return true;
 }
 
@@ -46,9 +49,11 @@ std::vector<std::string> split(std::string str, const std::string delimiter){
     size_t pos;
 
     while ((pos = str.find(delimiter)) != std::string::npos){
+
         output.push_back(str.substr(0, pos));
         str.erase(0, pos + delimiter.length());
     }
+
     output.push_back(str.substr(0, pos));
 
     return output;

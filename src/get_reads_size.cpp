@@ -1,45 +1,59 @@
 #include <iostream>
 #include <fstream>
 
-// Counts length of reads
-void getReadsLength(std::ifstream& readFile, std::ofstream& outputFile){
 
-    std::string line, id;
-
-    while(std::getline(readFile, line)){
-
-        if (line[0] != '>'){
-
-            outputFile << id << "\t" << std::to_string(line.size()) << "\n";
-
-        } else {
-
-            id = line.substr(1);
-        }
-    }
-}
-
-
+// Output length of each reads in a reads file
 int main(int argc, char* argv[]){
 
     if( argc < 3){
 
-        std::cout<<"Usage: get_reads_size input output\n\n";
+        std::cerr << "Usage: get_reads_size input output" << std::endl << std::endl;
+
+        return -1;
     }
 
-    std::string inputFileName = argv[1];
-    std::string outputFileName = argv[2];
+    // Retrieve command line arguments
+    std::string inputFilePath = argv[1];
+    std::string outputFilePath = argv[2];
 
+    // Initialize file streams
     std::ifstream inputFile;
     std::ofstream outputFile;
 
-    inputFile.open(inputFileName.c_str());
-    outputFile.open(outputFileName.c_str());
+    // Open files
+    inputFile.open(inputFilePath.c_str());
+    outputFile.open(outputFilePath.c_str());
 
-    getReadsLength(inputFile, outputFile);
+    if (inputFile.is_open() and outputFile.is_open()){
 
-    inputFile.close();
-    outputFile.close();
+        std::string line, id;
+
+        while(std::getline(inputFile, line)){
+
+            if (line[0] != '>'){
+
+                outputFile << id << "\t" << std::to_string(line.size()) << "\n";
+
+            } else {
+
+                id = line.substr(1);
+            }
+        }
+
+    } else {
+
+        if (!inputFile.is_open()){
+
+            std::cerr << "Error : can't open the file """ << inputFilePath << """, please check your input." << std::endl;
+        }
+
+        if (!outputFile.is_open()){
+
+            std::cerr << "Error : can't open the file """ << outputFilePath << """, please check your input." << std::endl;
+        }
+
+        return -2;
+    }
 
     return 0;
 }

@@ -23,12 +23,15 @@ ReadPair::ReadPair(){
 // Compares two reads and returns the positions of difference between thoses reads
 void ReadPair::compare(std::ofstream& outputFile, std::ofstream& outputFileCount){
 
-    // In case something was removed during correction or the reference is smaller/bigger...
+    // outputFile stores all errors, outputFileCount stores the number of errors (useful for analyses)
 
+    // Test that both reads were aligned
     if (this->seq_1 != "not_aligned" and this->seq_2 != "not_aligned"){
 
+        // Test that both reads have the same size
         if (this->seq_1.size() != this->seq_2.size()){
 
+            // If not, output size difference
             outputFile << std::to_string(this->id) << " : " << "size_difference_" << std::to_string(this->seq_1.size()) << "_" <<
                           std::to_string(this->seq_2.size()) << "\n";
 
@@ -45,7 +48,6 @@ void ReadPair::compare(std::ofstream& outputFile, std::ofstream& outputFileCount
 
                     errors.push_back(i);
                 }
-
             }
 
             if (errors.size() > 0){
@@ -76,16 +78,13 @@ void ReadPair::compare(std::ofstream& outputFile, std::ofstream& outputFileCount
 
                 outputFile << std::to_string(this->id) << " : " << "seq_1_not_aligned\n";
                 outputFileCount << std::to_string(this->id) << " : " << "seq_1_not_aligned\n";
-
             }
 
         } else {
 
             outputFile << std::to_string(this->id) << " : " << "seq_2_not_aligned\n";
             outputFileCount << std::to_string(this->id) << " : " << "seq_2_not_aligned\n";
-
         }
-
     }
 }
 
