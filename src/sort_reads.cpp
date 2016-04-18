@@ -7,7 +7,7 @@ int main(int argc, char* argv[]){
 
     if( argc < 3){
 
-        std::cerr << "Usage : get_reads_size input output" << std::endl << std::endl;
+        std::cerr << "Usage : ./sort_reads input output" << std::endl << std::endl;
 
         return -1;
     }

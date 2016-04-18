@@ -25,66 +25,71 @@ void ReadPair::compare(std::ofstream& outputFile, std::ofstream& outputFileCount
 
     // outputFile stores all errors, outputFileCount stores the number of errors (useful for analyses)
 
-    // Test that both reads were aligned
-    if (this->seq_1 != "not_aligned" and this->seq_2 != "not_aligned"){
+    if (this->seq_1 != "" and this->seq_2 != ""){
 
-        // Test that both reads have the same size
-        if (this->seq_1.size() != this->seq_2.size()){
+        // Test that both reads were aligned
+        if (this->seq_1 != "not_aligned" and this->seq_2 != "not_aligned"){
 
-            // If not, output size difference
-            outputFile << std::to_string(this->id) << " : " << "size_difference_" << std::to_string(this->seq_1.size()) << "_" <<
-                          std::to_string(this->seq_2.size()) << "\n";
+            // Test that both reads have the same size
+            if (this->seq_1.size() != this->seq_2.size()){
 
-            outputFileCount << std::to_string(this->id) << " : " << "size_difference_" << std::to_string(this->seq_1.size()) << "_" <<
-                          std::to_string(this->seq_2.size()) << "\n";
+                // If not, output size difference
+                outputFile << std::to_string(this->id) << " : " << "size_difference_" << std::to_string(this->seq_1.size()) << "_" <<
+                              std::to_string(this->seq_2.size()) << "\n";
 
-        } else {
-
-            std::vector<uint> errors;
-
-            for (uint i=0; i<this->seq_1.size(); ++i){
-
-                if (this->seq_1[i] != this->seq_2[i]){
-
-                    errors.push_back(i);
-                }
-            }
-
-            if (errors.size() > 0){
-
-                outputFileCount << std::to_string(this->id)<< " : " << std::to_string(errors.size()) << "\n";
-                outputFile << std::to_string(this->id)<< " : ";
-
-                for (uint i=0; i < errors.size() - 1; ++i){
-
-                    outputFile << std::to_string(errors[i]) << ", ";
-                }
-
-                outputFile << std::to_string(errors[errors.size()-1]) << "\n";
-            }
-
-        }
-
-    } else {
-
-        if (this->seq_1 == "not_aligned"){
-
-            if (this->seq_2 == "not_aligned"){
-
-                outputFile << std::to_string(this->id) << " : " << "seq_1_2_not_aligned\n";
-                outputFileCount << std::to_string(this->id) << " : " << "seq_1_2_not_aligned\n";
+                outputFileCount << std::to_string(this->id) << " : " << "size_difference_" << std::to_string(this->seq_1.size()) << "_" <<
+                              std::to_string(this->seq_2.size()) << "\n";
 
             } else {
 
-                outputFile << std::to_string(this->id) << " : " << "seq_1_not_aligned\n";
-                outputFileCount << std::to_string(this->id) << " : " << "seq_1_not_aligned\n";
+                std::vector<uint> errors;
+
+                for (uint i=0; i<this->seq_1.size(); ++i){
+
+                    if (this->seq_1[i] != this->seq_2[i]){
+
+                        errors.push_back(i);
+                    }
+                }
+
+                if (errors.size() > 0){
+
+                    outputFileCount << std::to_string(this->id)<< " : " << std::to_string(errors.size()) << "\n";
+                    outputFile << std::to_string(this->id)<< " : ";
+
+                    for (uint i=0; i < errors.size() - 1; ++i){
+
+                        outputFile << std::to_string(errors[i]) << ", ";
+                    }
+
+                    outputFile << std::to_string(errors[errors.size()-1]) << "\n";
+                }
+
             }
 
         } else {
 
-            outputFile << std::to_string(this->id) << " : " << "seq_2_not_aligned\n";
-            outputFileCount << std::to_string(this->id) << " : " << "seq_2_not_aligned\n";
+            if (this->seq_1 == "not_aligned"){
+
+                if (this->seq_2 == "not_aligned"){
+
+                    outputFile << std::to_string(this->id) << " : " << "seq_1_2_not_aligned\n";
+                    outputFileCount << std::to_string(this->id) << " : " << "seq_1_2_not_aligned\n";
+
+                } else {
+
+                    outputFile << std::to_string(this->id) << " : " << "seq_1_not_aligned\n";
+                    outputFileCount << std::to_string(this->id) << " : " << "seq_1_not_aligned\n";
+                }
+
+            } else {
+
+                outputFile << std::to_string(this->id) << " : " << "seq_2_not_aligned\n";
+                outputFileCount << std::to_string(this->id) << " : " << "seq_2_not_aligned\n";
+            }
         }
+
+    } else {
+        return;
     }
 }
-

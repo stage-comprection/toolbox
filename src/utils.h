@@ -32,3 +32,36 @@ void resetFileIndex(std::ifstream& file);
 
 // Computes the reverse complement of a DNA sequence using an accession table
 std::string reverseComplement(const std::string& read);
+
+// Find the max ID for reads in a file
+template<class readStructure>
+uint find_max(std::ifstream& file){
+
+    readStructure r;
+    std::string line;
+    std::vector<readStructure> v;
+
+    while(std::getline(file, line)){
+
+        if (line[0] == '>'){
+
+            r.id = std::stoi(line.substr(1));
+
+        } else {
+
+            r.seq_1 = line;
+            v.push_back(r);
+        }
+    }
+
+    uint m = 0;
+
+    for (uint i = 0; i < v.size(); ++i){
+
+        if (v[i].id > m) m = v[i].id;
+    }
+
+    resetFileIndex(file);
+
+    return m;
+}

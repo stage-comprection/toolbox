@@ -8,14 +8,14 @@
 void loadReadsFromFiles(std::ifstream& file1, std::ifstream& file2, std::vector<ReadPair>& reads){
 
     std::string line;
-    uint readNumber = 0;
+    int readNumber = -1;
 
     // Fill ReadPair seq_1.
     while(std::getline(file1, line)){
 
         if (line[0] == '>'){
 
-            readNumber = std::stoi(line.substr(1));
+            readNumber = stoi(line.substr(1));
 
         } else {
 
@@ -30,16 +30,19 @@ void loadReadsFromFiles(std::ifstream& file1, std::ifstream& file2, std::vector<
 
     std::cout << " - File 1 sorted" << std::endl;
 
+    readNumber = -1;
+
     // Fill seq_2 (direct access to ReadPair using ID, since ID = position in the vector)
     while(std::getline(file2, line)){
 
         if (line[0] == '>'){
 
-            readNumber = std::stoi(line.substr(1));
+            readNumber = stoi(line.substr(1));
 
         } else {
 
-            reads[readNumber].seq_2 += line;
+            if (readNumber >=0) reads[readNumber].seq_2 += line;
+            readNumber = -1;
         }
     }
 
@@ -77,28 +80,23 @@ int main(int argc, char *argv[]) {
         file1.open(file1Name.c_str());
         file2.open(file2Name.c_str());
 
-        // Count number of reads in each file
-        uint file1_n = countReads(file1);
-        uint file2_n = countReads(file2);
-
-        if (file1_n != file2_n){
-
-            std::cerr << "Error : input files have different number of reads. Please check your input." << std::endl;
-            std::cerr << "File 1 : " << std::to_string(file1_n) << " reads." << std::endl;
-            std::cerr << "File 2 : " << std::to_string(file2_n) << " reads." << std::endl;
-            return -2;
-        }
 
         if (file1.is_open() and file2.is_open()){
 
-            // Initialize an empty vector of ReadPairs of size = number of reads
+            // Find max read number in each file
+            uint m1 = find_max<ReadPair>(file1);
+            uint m2 = find_max<ReadPair>(file2);
+
+            // Initialize an empty vector of ReadPairs of size = max ID of reads (-> total number of reads in original file)
             std::vector<ReadPair> reads;
-            reads.resize(file1_n);
+            reads.resize(std::max(m1, m2)+1);
 
             // Initialize ReadPairs IDs ( id = position of the read : first read = 0, second read = 1 ...)
-            for (uint i=0; i<reads.size();++i){
+            for (uint i=0; i<reads.size(); ++i){
                 reads[i].id = i;
             }
+
+            std::cout << " - Vector initalized : size " << reads.size() << std::endl;
 
             // Fill ReadPair sequences (seq_1, seq_2)
             loadReadsFromFiles(file1, file2, reads);
