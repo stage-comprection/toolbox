@@ -34,12 +34,11 @@ void resetFileIndex(std::ifstream& file);
 std::string reverseComplement(const std::string& read);
 
 // Find the max ID for reads in a file
-template<class readStructure>
 uint find_max(std::ifstream& file){
 
-    readStructure r;
+    Read r;
     std::string line;
-    std::vector<readStructure> v;
+    std::vector<Read> v;
 
     while(std::getline(file, line)){
 
@@ -49,7 +48,7 @@ uint find_max(std::ifstream& file){
 
         } else {
 
-            r.seq_1 = line;
+            r.seq = line;
             v.push_back(r);
         }
     }

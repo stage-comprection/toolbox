@@ -58,7 +58,7 @@ int main(int argc, char *argv[]){
 
                         if (line[0] != '>' and line.size() > 1){
 
-                            outputFile << '>' << std::to_string(count) << "\n" << line;
+                            outputFile << '>' << std::to_string(count) << "\n" << line << "\n";
                             ++count;
                         }
                     }
@@ -69,7 +69,7 @@ int main(int argc, char *argv[]){
 
                         if (line[0] != '>' and line.find('N') == std::string::npos and line.size() > 1){
 
-                            outputFile << '>' << std::to_string(count) << "\n" << line;
+                            outputFile << '>' << std::to_string(count) << "\n" << line << "\n";
                             ++count;
                         }
                     }

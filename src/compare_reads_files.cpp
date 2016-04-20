@@ -25,11 +25,6 @@ void loadReadsFromFiles(std::ifstream& file1, std::ifstream& file2, std::vector<
 
     std::cout << " - File 1 loaded" << std::endl;
 
-    // Sort ReadPair vector according to ID
-    std::sort(reads.begin(), reads.end());
-
-    std::cout << " - File 1 sorted" << std::endl;
-
     readNumber = -1;
 
     // Fill seq_2 (direct access to ReadPair using ID, since ID = position in the vector)

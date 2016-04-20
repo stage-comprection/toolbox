@@ -10,7 +10,7 @@ SRC = $(BASEDIR)/src
 BUILD = $(BASEDIR)/build
 BIN = $(BASEDIR)/bin
 
-TARGET = access_reads compare_reads_files compare_subset count_insertions get_bad_reads format_reads_file get_reads_size sort_reads 
+TARGET = access_reads compare_reads_files compare_reads_mem count_insertions get_bad_reads format_reads_file get_reads_size sort_reads 
 
 # Objects names
 OBJECTS =    $(BUILD)/utils.o $(BUILD)/read.o
@@ -27,7 +27,7 @@ compare_reads_files: $(BUILD)/compare_reads_files.o $(OBJECTS)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $(BIN)/$@ $^ 
 
 
-compare_subset: $(BUILD)/compare_subset.o $(OBJECTS)
+compare_reads_mem: $(BUILD)/compare_reads_mem.o $(OBJECTS)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $(BIN)/$@ $^ 
 
 
