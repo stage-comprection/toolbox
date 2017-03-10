@@ -70,4 +70,7 @@ Thumbs.db
 # --------
 *.dll
 *.exe
-*.pro
+
+#Perso
+/bin/
+

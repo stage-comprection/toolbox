@@ -1,10 +1,4 @@
-#include "read.h"
 #include "utils.h"
-#include <iostream>
-#include <string>
-#include <fstream>
-#include <vector>
-#include <algorithm>
 
 
 /* All files should already be sorted

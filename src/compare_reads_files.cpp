@@ -1,10 +1,10 @@
-#include "read.h"
 #include "utils.h"
 
 
 /* Store two fasta files as a ReadPair object (Properties : ID, seq_1, seq_2)
  * Input : 2 file streams, 1 vector of ReadPairs of size = number of reads
  */
+
 void loadReadsFromFiles(std::ifstream& file1, std::ifstream& file2, std::vector<ReadPair>& reads){
 
     std::string line;
@@ -79,8 +79,8 @@ int main(int argc, char *argv[]) {
         if (file1.is_open() and file2.is_open()){
 
             // Find max read number in each file
-            uint m1 = find_max<ReadPair>(file1);
-            uint m2 = find_max<ReadPair>(file2);
+            uint m1 = find_max(file1);
+            uint m2 = find_max(file2);
 
             // Initialize an empty vector of ReadPairs of size = max ID of reads (-> total number of reads in original file)
             std::vector<ReadPair> reads;

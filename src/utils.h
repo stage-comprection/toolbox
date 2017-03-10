@@ -6,6 +6,7 @@
 #include <fstream>
 #include <algorithm>
 #include <bitset>
+#include "read.h"
 
 #define LOGOK fprintf(stderr, "ERR : %s:%i\n", __FILE__, __LINE__);
 
@@ -34,33 +35,4 @@ void resetFileIndex(std::ifstream& file);
 std::string reverseComplement(const std::string& read);
 
 // Find the max ID for reads in a file
-uint find_max(std::ifstream& file){
-
-    Read r;
-    std::string line;
-    std::vector<Read> v;
-
-    while(std::getline(file, line)){
-
-        if (line[0] == '>'){
-
-            r.id = std::stoi(line.substr(1));
-
-        } else {
-
-            r.seq = line;
-            v.push_back(r);
-        }
-    }
-
-    uint m = 0;
-
-    for (uint i = 0; i < v.size(); ++i){
-
-        if (v[i].id > m) m = v[i].id;
-    }
-
-    resetFileIndex(file);
-
-    return m;
-}
+uint find_max(std::ifstream& file);
